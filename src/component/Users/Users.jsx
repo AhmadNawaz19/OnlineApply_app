@@ -13,14 +13,15 @@ const Users = () => {
 
     const getAllUser = async () => {
         let user = await get(ref(database));
-        if(user.val() === null){
+        if (user.val() === null) {
             setData(false)
-        }else{
+        } else {
             user = Object.entries(user.val()).map(([id, val]) => ({
                 id: id,
                 ...val
             }))
             setUser(user)
+            console.log(users)
             setData(true)
         }
     }
@@ -47,39 +48,41 @@ const Users = () => {
         <div className='userMain'>
             {admin ? <div className='users'>
                 {data ? <table>
-                        <thead>
-                            <tr>
-                                <th>FullName</th>
-                                <th>Phone Number</th>
-                                <th>Address</th>
-                                <th>Grade</th>
-                                <th>Course</th>
-                                <th>control</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                users?.map((val, idx) => {
-                                    return <tr key={idx}>
-                                        <td>{val.Name}</td>
-                                        <td>{val.id}</td>
-                                        <td>{val.Address}</td>
-                                        <td>{val.Grade}</td>
-                                        <td>{val.Course}</td>
-                                        <td><button onClick={() => deleteUser(val.id)}>delete</button></td>
-                                    </tr>
-                                })
-                            }
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>FullName</th>
+                            <th>Phone Number</th>
+                            <th>Address</th>
+                            <th>Grade</th>
+                            <th>Course</th>
+                            <th>control</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            users?.map((val, idx) => {
+                                return <tr key={idx}>
+                                    <td>{idx}</td>
+                                    <td>{val.Name}</td>
+                                    <td>{val.id}</td>
+                                    <td>{val.Address}</td>
+                                    <td>{val.Grade}</td>
+                                    <td>{val.Course}</td>
+                                    <td><button onClick={() => deleteUser(val.id)}>delete</button></td>
+                                </tr>
+                            })
+                        }
 
-                        </tbody>
-                    </table> : <h1 style={{color:'white', textAlign : 'center'}}>Currently no User Apply..</h1>
+                    </tbody>
+                </table> : <h1 style={{ color: 'white', textAlign: 'center' }}>Currently no User Apply..</h1>
                 }
             </div> : <h1 style={{
                 color: 'white',
                 fontSize: '5vw'
             }}
             >404</h1>}
-            
+
         </div>
     )
 }
