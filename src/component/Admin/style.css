@@ -1,0 +1,66 @@
+.adminMain{
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .adminform{
+        height: 93%;
+        width: 90%;
+        background-color: rgba(255, 255, 255, 0.123);
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        form{
+            height: 70%;
+            width: 40%;
+            background-color: rgba(255, 255, 255, 0.192);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            input{
+                width: 70%;
+                margin-top:60px;
+                height: 10%;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 1.2vw;
+                font-weight: bolder;
+            }
+
+            button{
+                margin-top: 40px;
+                width: 30%;
+                padding: 10px;
+                border-radius: 10px;
+                font-size: 1.3vw;
+                font-weight: bolder;
+            }
+        }
+    }
+}
+
+@media (max-width : 630px) {
+    .adminMain{
+        .adminform{
+            form{
+                width: 70%;
+                margin: 0px;
+                input{
+                    font-size: 3vw;
+                }
+                button{
+                    width: 40%;
+                    padding: 20px;
+                    font-size: 3vw;
+                }
+            }
+        }
+    }
+}

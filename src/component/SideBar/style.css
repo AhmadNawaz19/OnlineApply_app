@@ -1,0 +1,44 @@
+.service{
+        height: 95%;
+        width: 20%;
+        background-color: rgba(255, 255, 255, 0.473);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
+        margin-left: 10px;
+        border-radius: 10px;
+        
+        .serviceBtn{
+            background-color: white;
+            color: black;
+            height: 10%;
+            width: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+            font-size: 2vw;
+            text-decoration: none;
+            border-radius: 10px;
+        }
+}
+
+@media (max-width:630px) {
+    .service{
+        display: inline-flex;
+        height: 15%;
+        width: 95%;
+        flex-direction: row;
+        gap: 10px;
+        margin-top: 10px;
+
+        .serviceBtn{
+            width: 20%;
+            height: 50%;
+            margin-top: 0px;
+            margin-left: 20px;
+            font-size: 4vw;
+        }
+    }
+}

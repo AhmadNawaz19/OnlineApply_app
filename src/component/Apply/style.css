@@ -1,0 +1,118 @@
+.applyMain {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+
+    .success {
+        height: 20%;
+        width: 30%;
+        background-color: red;
+        position: absolute;
+        margin: 10%;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3vw;
+    }
+
+    #form {
+        height: 95%;
+        width: 90%;
+        background-color: rgba(255, 255, 255, 0.671);
+        margin-top: 20px;
+        border-radius: 10px;
+
+        input {
+            width: 20%;
+            margin-top: 40px;
+            height: 8%;
+            border-radius: 10px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.349);
+            font-size: 1.2vw;
+            font-weight: bolder;
+            margin-left: 60px;
+            color: black;
+        }
+
+        select {
+            margin: 30px 50px;
+            width: 20%;
+            height: 9%;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2vw;
+            background-color: rgba(255, 255, 255, 0.308);
+        }
+
+        label {
+            color: red;
+        }
+
+        button {
+            width: 50%;
+            margin-top: 30px;
+            margin-left: 25%;
+            height: 10%;
+            border-radius: 10px;
+            font-size: 1.5vw;
+            font-weight: bolder;
+        }
+
+        .spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-top: 2px solid #000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+    }
+}
+
+@media (max-width : 600px) {
+    .applyMain {
+        .success {
+            margin-top: 25%;
+            width: 40%;
+            font-size: 4vw;
+        }
+
+        #form {
+            overflow-y: scroll;
+
+            input {
+                margin-left: 15%;
+                width: 70%;
+                font-size: 3vw;
+            }
+
+            select {
+                margin: 20px 15%;
+                width: 70%;
+                font-size: 3vw;
+            }
+
+            button {
+                font-size: 3vw;
+                margin-bottom: 160px;
+            }
+
+            label {
+                display: block;
+                margin-left: 25%;
+                color: red;
+            }
+        }
+    }
+}

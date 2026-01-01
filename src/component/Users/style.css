@@ -1,0 +1,60 @@
+.userMain{
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .users{
+        height: 100%;
+        width: 90%;
+        background-color: rgba(255, 255, 255, 0.137);
+        border-radius: 10px;
+        overflow-y: scroll;
+        margin-top: 50px;
+
+        table{
+            color: white;
+            border: 1px solid white;
+            border-collapse: collapse;
+            width: 60%;
+            margin-left: 200px;
+            text-align: center;
+            
+            thead{
+                border: 1px solid white;
+                
+                tr{
+                    border: 1px solid white;
+                }
+                th{
+                    border: 1px solid white;
+                }
+            }
+            tbody{
+                border: 1px solid white;
+                
+                tr{
+                    border: 1px solid white;
+                }
+                td{
+                    border: 1px solid white;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width : 630px) {
+    .userMain{
+        .users{
+            width: 100%;
+            table{
+                margin-left: 3px;
+                width: 98%;
+                font-size: 3.5vw;
+            }
+        }
+    }
+}

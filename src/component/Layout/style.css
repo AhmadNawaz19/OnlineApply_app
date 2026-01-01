@@ -1,0 +1,17 @@
+.leyoutMain{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    
+    .Outlet{
+        height: 90%;
+        width: 100%;
+        background-color: black;
+    }
+}
+
+@media (max-width:630px) {
+    .leyoutMain{
+        display: block;
+    }
+}
