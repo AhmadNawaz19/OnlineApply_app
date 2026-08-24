@@ -9,6 +9,7 @@ import Layout from './component/Layout/Layout.jsx'
 import Apply from './component/Apply/Apply.jsx'
 import Admin from './component/Admin/Admin.jsx'
 import Users from './component/Users/Users.jsx'
+import CourseControl from './component/CourseManager/course_manager.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -19,8 +20,9 @@ createRoot(document.getElementById('root')).render(
           <Route path='/aboutUs' element={<About />}></Route>
           <Route path='/course' element={<Course />}></Route>
           <Route path='/apply' element={<Apply />}></Route>
-          <Route path='/users' element={<Users />}></Route>
-          <Route path='/admin_panel' element={<Admin />}></Route>
+          <Route path='/applications' element={<Users />}></Route>
+          <Route path='/login' element={<Admin />}></Route>
+          <Route path='/course_manager' element={<CourseControl />}></Route>
         </Route>
       </Routes>
     </StrictMode>,

@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -9,18 +8,17 @@ import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDaFhWEkCtid3tAXqGc1SQYqc-oOJcYmYc",
-  authDomain: "nawaztech1.firebaseapp.com",
-  databaseURL: "https://nawaztech1-default-rtdb.firebaseio.com",
-  projectId: "nawaztech1",
-  storageBucket: "nawaztech1.firebasestorage.app",
-  messagingSenderId: "400518564374",
-  appId: "1:400518564374:web:d9ac9db4738dd4f8138337",
-  measurementId: "G-C0SZXWFGN0"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:  import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId:  import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:  import.meta.env.VITE_APP_ID,
+  measurementId:  import.meta.env.VITE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 export const auth = getAuth(app)
 export const database = getDatabase(app)

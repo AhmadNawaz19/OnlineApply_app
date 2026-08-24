@@ -1,44 +1,118 @@
 .service{
         height: 95%;
-        width: 20%;
-        background-color: rgba(255, 255, 255, 0.473);
+        width: 16%;
+        background-color: white;
         display: flex;
-        align-items: center;
         flex-direction: column;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-left: 10px;
-        border-radius: 10px;
+
+        img{
+            height: 10%;
+            width: 30%;
+            margin-top: 10px;
+            margin-left: 5px;
+            border-radius: 10%;
+            align-items: self-start;
+            margin-bottom: 30px;
+
+        }
+        
         
         .serviceBtn{
-            background-color: white;
             color: black;
             height: 10%;
-            width: 60%;
+            width: 100%;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 50px;
-            font-size: 2vw;
+            font-family: Courier New, monospace;
+            margin-top: 10px;
+            font-size: 1.3vw;
             text-decoration: none;
             border-radius: 10px;
+            font-weight: bolder;
+            span{
+                margin-left: 5px;
+                width: 100%;
+            }
+            i{
+                display: block;
+                margin-left: 5px;
+            }
+            &:hover{
+                color: rgb(1, 113, 226);
+            }
         }
+        i{
+            display: none;
+        }
+        .menu{
+            display: none;
+        }
+        
 }
 
-@media (max-width:630px) {
+@media (max-width:600px) {
     .service{
         display: inline-flex;
-        height: 15%;
-        width: 95%;
+        height: 8%;
+        width: 100%;
+        margin: 0;
         flex-direction: row;
-        gap: 10px;
         margin-top: 10px;
+        background-color: white;
+        img{
+            height: 70%;
+            width: 10%;
+            margin-top: 7px;
+            border-radius: 10%;
+            margin-left: 10px;
+        }
 
         .serviceBtn{
-            width: 20%;
+            width: 30%;
             height: 50%;
-            margin-top: 0px;
-            margin-left: 20px;
+            margin: 0;
+            margin-top: 15px;
             font-size: 4vw;
+            background-color: unset;
+            font-weight: bolder;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            span{
+                margin: 0;
+                width: 100%;
+            }
+        }
+        .hideServiceBtn{
+            display: none;
+        }
+        i{
+            display: block;
+            margin: 5% 5%;
+            color: black;
+        }
+        .menu{
+            right: 10px;
+            top : 50px;
+            position: absolute;
+            display: block;
+            height: 150px;
+            width: 40%;
+            padding: 10px;
+            background-color: white;
+            box-shadow: 0px 0px 2px black;
+            
+            .serviceBtn{
+                width: 100%;
+                height: 25%;
+                color: black;
+            }
+            .hideServiceBtn{
+                display: block;
+                margin: 0;
+            }
         }
     }
 }
