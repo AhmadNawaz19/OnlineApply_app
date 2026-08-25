@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, get, set } from "firebase/database";
 import "./style.css";
 
 const AboutUs = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-  
-  // 1. Initialize mapUrl from sessionStorage, or fall back to the default URL
-  const [mapUrl, setMapUrl] = useState(() => {
-    const savedUrl = sessionStorage.getItem("instituteMapUrl");
-    return (
-      savedUrl ||
-      "https://maps.google.com/maps?q=University%20of%20Science%20and%20Technology%20Bannu&t=&z=15&ie=UTF8&iwloc=&output=embed"
-    );
-  });
+  const [mapUrl, setMapUrl] = useState(
+    "https://maps.google.com/maps?q=University%20of%20Science%20and%20Technology%20Bannu&t=&z=15&ie=UTF8&iwloc=&output=embed"
+  );
 
   const [isEditingMap, setIsEditingMap] = useState(false);
   const [tempUrl, setTempUrl] = useState(mapUrl);
 
+  const db = getDatabase();
+  const mapRef = ref(db, "settings/mapConfig");
+
+  // 1. Check Auth & Load Map URL from Realtime DB on Mount
   useEffect(() => {
     const auth = getAuth();
 
-    // Check Firebase Auth User
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.email === "nawaztechnical@gmail.com") {
         setIsAdmin(true);
@@ -29,14 +27,34 @@ const AboutUs = () => {
       }
     });
 
+    const fetchMapUrl = async () => {
+      try {
+        const snapshot = await get(mapRef);
+        if (snapshot.exists() && snapshot.val().url) {
+          setMapUrl(snapshot.val().url);
+          setTempUrl(snapshot.val().url);
+        }
+      } catch (error) {
+        console.error("Error loading map URL from Realtime Database:", error);
+      }
+    };
+
+    fetchMapUrl();
+
     return () => unsubscribe();
   }, []);
 
-  // 2. Save updated URL to sessionStorage and component state
-  const handleMapSave = () => {
-    sessionStorage.setItem("instituteMapUrl", tempUrl);
-    setMapUrl(tempUrl);
-    setIsEditingMap(false);
+  // 2. Persist Updated Map URL to Realtime DB
+  const handleMapSave = async () => {
+    try {
+      await set(mapRef, { url: tempUrl });
+      setMapUrl(tempUrl);
+      setIsEditingMap(false);
+      alert("Map URL updated successfully...");
+    } catch (error) {
+      console.error("Error saving map URL:", error);
+      alert("Failed to save map URL.");
+    }
   };
 
   const Details = [
@@ -184,7 +202,7 @@ const AboutUs = () => {
                     </div>
                   )}
 
-                  {/* Dynamic Map iframe */}
+                  {/* Dynamic map iframe */}
                   {details.mapUrl && (
                     <iframe
                       title="Institute Location"
