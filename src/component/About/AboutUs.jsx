@@ -23,10 +23,8 @@ const AboutUs = () => {
 
     // Check current Firebase user
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-
       const isCurrentUserAdmin =
-        user?.email?.toLowerCase() ===
-        "nawaztechnical@gmail.com";
+        user?.email?.toLowerCase() === "nawaztechnical@gmail.com";
 
       setIsAdmin(isCurrentUserAdmin);
     });
@@ -35,7 +33,6 @@ const AboutUs = () => {
     const unsubscribeMap = onValue(
       mapRef,
       (snapshot) => {
-
         const data = snapshot.val();
 
         if (data?.url) {
@@ -49,14 +46,10 @@ const AboutUs = () => {
         setLoadingMap(false);
       },
       (error) => {
-        console.error(
-          "Firebase read error:",
-          error.code,
-          error.message
-        );
+        console.error("Firebase read error:", error.code, error.message);
 
         setLoadingMap(false);
-      }
+      },
     );
 
     return () => {
@@ -83,10 +76,7 @@ const AboutUs = () => {
       return;
     }
 
-    if (
-      user.email?.toLowerCase() !==
-      "nawaztechnical@gmail.com"
-    ) {
+    if (user.email?.toLowerCase() !== "nawaztechnical@gmail.com") {
       alert("You do not have permission to update the map.");
       return;
     }
@@ -100,7 +90,6 @@ const AboutUs = () => {
         url: newUrl,
       });
 
-
       // onValue will also update these automatically
       setMapUrl(newUrl);
       setTempUrl(newUrl);
@@ -108,17 +97,9 @@ const AboutUs = () => {
 
       alert("Map URL updated successfully.");
     } catch (error) {
-      console.error(
-        "Firebase save error:",
-        error.code,
-        error.message
-      );
+      console.error("Firebase save error:", error.code, error.message);
 
-      alert(
-        `Failed to save map: ${error.code || ""} ${
-          error.message || ""
-        }`
-      );
+      alert(`Failed to save map: ${error.code || ""} ${error.message || ""}`);
     } finally {
       setSaving(false);
     }
@@ -181,10 +162,7 @@ REST API, and OAuth 2.0.
       {/* LEFT SECTION */}
       <div id="leftMain">
         <div className="img">
-          <img
-            src="pic2.jpeg"
-            alt="Ahmad Nawaz Profile"
-          />
+          <img src="pic2.jpeg" alt="Ahmad Nawaz Profile" />
         </div>
 
         <div id="other">
@@ -193,10 +171,7 @@ REST API, and OAuth 2.0.
             target="_blank"
             rel="noreferrer"
           >
-            <img
-              src="linkedin.png"
-              alt="LinkedIn Profile"
-            />
+            <img src="linkedin.png" alt="LinkedIn Profile" />
           </a>
 
           <a
@@ -204,10 +179,7 @@ REST API, and OAuth 2.0.
             target="_blank"
             rel="noreferrer"
           >
-            <img
-              src="github.png"
-              alt="GitHub Profile"
-            />
+            <img src="github.png" alt="GitHub Profile" />
           </a>
 
           <a
@@ -215,10 +187,7 @@ REST API, and OAuth 2.0.
             target="_blank"
             rel="noreferrer"
           >
-            <img
-              src="hacker.png"
-              alt="HackerRank Profile"
-            />
+            <img src="hacker.png" alt="HackerRank Profile" />
           </a>
         </div>
       </div>
@@ -227,40 +196,27 @@ REST API, and OAuth 2.0.
       <div id="rightMain">
         {Details.map((details) => (
           <React.Fragment key={details.id}>
-            <h2 className="title">
-              {details.title}
-            </h2>
+            <h2 className="title">{details.title}</h2>
 
             <div className="description">
               {/* NORMAL DESCRIPTION */}
-              {details.description && (
-                <p>{details.description}</p>
-              )}
+              {details.description && <p>{details.description}</p>}
 
               {/* CONTACT */}
               {details.id === "contact" && (
                 <>
                   <p>
-                    Phone:{" "}
-                    <a href={`tel:${details.phone}`}>
-                      {details.phone}
-                    </a>
+                    Phone: <a href={`tel:${details.phone}`}>{details.phone}</a>
                   </p>
 
                   <p>
                     Email:{" "}
-                    <a href={`mailto:${details.email}`}>
-                      {details.email}
-                    </a>
+                    <a href={`mailto:${details.email}`}>{details.email}</a>
                   </p>
 
                   <p>
                     Website:{" "}
-                    <a
-                      href={details.website}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a href={details.website} target="_blank" rel="noreferrer">
                       {details.website}
                     </a>
                   </p>
@@ -270,7 +226,6 @@ REST API, and OAuth 2.0.
               {/* MAP SECTION */}
               {details.id === "location" && (
                 <div className="mapContainer">
-
                   {/* ADMIN CONTROLS */}
                   {isAdmin && (
                     <div
@@ -281,9 +236,7 @@ REST API, and OAuth 2.0.
                       {!isEditingMap ? (
                         <button
                           type="button"
-                          onClick={() =>
-                            setIsEditingMap(true)
-                          }
+                          onClick={() => setIsEditingMap(true)}
                         >
                           Update Map URL
                         </button>
@@ -292,9 +245,7 @@ REST API, and OAuth 2.0.
                           <input
                             type="url"
                             value={tempUrl}
-                            onChange={(e) =>
-                              setTempUrl(e.target.value)
-                            }
+                            onChange={(e) => setTempUrl(e.target.value)}
                             placeholder="Paste Google Maps embed URL"
                             style={{
                               width: "100%",
@@ -315,9 +266,7 @@ REST API, and OAuth 2.0.
                               onClick={handleMapSave}
                               disabled={saving}
                             >
-                              {saving
-                                ? "Saving..."
-                                : "Save"}
+                              {saving ? "Saving..." : "Save"}
                             </button>
 
                             <button
@@ -334,27 +283,26 @@ REST API, and OAuth 2.0.
                   )}
 
                   {/* MAP LOADING */}
-                  {loadingMap && (
-                    <p>Loading map...</p>
-                  )}
+                  {loadingMap && <p>Loading map...</p>}
 
                   {/* GOOGLE MAP */}
                   {!loadingMap && mapUrl && (
-                    <iframe
-                      key={mapUrl}
-                      title="Institute Location"
-                      src={mapUrl}
-                      width="100%"
-                      height="250"
-                      style={{
-                        border: "0",
-                        borderRadius: "8px",
-                        display: "block",
-                      }}
-                      allowFullScreen
-                      loading="eager"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    />
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mapImageLink"
+                    >
+                      <img
+                        src="/map.jpg"
+                        alt="Open institute location in Google Maps"
+                        className="mapImage"
+                      />
+
+                      <div className="mapOverlay">
+                        <span>📍 View Location on Google Maps</span>
+                      </div>
+                    </a>
                   )}
                 </div>
               )}

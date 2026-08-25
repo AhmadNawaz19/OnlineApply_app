@@ -159,6 +159,41 @@
   border: none;
   margin-right: 50px;
 }
+.mapImageLink {
+  width: 100%;
+  height: 250px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.mapImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.mapOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 12px;
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.mapImageLink:hover .mapImage {
+  transform: scale(1.03);
+}
+
+.mapImage {
+  transition: transform 0.3s ease;
+}
 
 /* Responsive Layout for Mobile & Tablet */
 @media (max-width: 768px) {
