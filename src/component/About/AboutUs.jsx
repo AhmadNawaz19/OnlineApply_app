@@ -42,7 +42,7 @@ const AboutUs = () => {
     fetchMapUrl();
 
     return () => unsubscribe();
-  }, []);
+  }, [mapRef]);
 
   // 2. Persist Updated Map URL to Realtime DB
   const handleMapSave = async () => {
