@@ -200,7 +200,7 @@
 #courses .section-header {
   text-align: center;
   max-width: 650px;
-  margin: 0 auto 40px auto;
+  margin: 0 auto 0px auto;
 }
 
 #courses .badge {
@@ -775,7 +775,7 @@
         margin: 0;
         h1 {
           font-size: 10vw;
-          margin-top: 30px;
+          margin-top: 15px;
         }
         h2 {
           font-size: 10vw;
@@ -800,11 +800,11 @@
         /* background-color: red; */
         height: 40%;
         width: 100%;
-        margin: 0;
         border-radius: 10px;
         img{
           height: 95%;
           margin: 0;
+          margin-left: 8px;
         }
       }
     }
@@ -826,27 +826,9 @@
   }
 
   #courses {
-    height: auto;
-    width: 100%;
-    margin: 0;
-    padding: 20px 16px;
-    background-color: #f8fafc;
+    display: none;
+    
   }
-
-  #courses .section-header h2 {
-    font-size: 1.75rem;
-  }
-
-  #courses .courses-grid {
-    grid-template-columns: 1fr;
-  }
-
-  #courses .card-footer {
-  margin-top: auto;
-  width: 70%;
-  margin-left: 15%;
-}
-
 
   #about {
     height: auto;

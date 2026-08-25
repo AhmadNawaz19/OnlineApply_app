@@ -1,7 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "./style.css";
 
 const AboutUs = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // 1. Initialize mapUrl from sessionStorage, or fall back to the default URL
+  const [mapUrl, setMapUrl] = useState(() => {
+    const savedUrl = sessionStorage.getItem("instituteMapUrl");
+    return (
+      savedUrl ||
+      "https://maps.google.com/maps?q=University%20of%20Science%20and%20Technology%20Bannu&t=&z=15&ie=UTF8&iwloc=&output=embed"
+    );
+  });
+
+  const [isEditingMap, setIsEditingMap] = useState(false);
+  const [tempUrl, setTempUrl] = useState(mapUrl);
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    // Check Firebase Auth User
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user && user.email === "nawaztechnical@gmail.com") {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // 2. Save updated URL to sessionStorage and component state
+  const handleMapSave = () => {
+    sessionStorage.setItem("instituteMapUrl", tempUrl);
+    setMapUrl(tempUrl);
+    setIsEditingMap(false);
+  };
+
   const Details = [
     {
       id: "intro",
@@ -37,8 +74,7 @@ const AboutUs = () => {
     {
       id: "location",
       title: "INSTITUTE LOCATION",
-      // Set your institute address or Google Maps place query here
-      mapUrl: "https://maps.google.com/maps?q=University%20of%20Science%20and%20Technology%20Bannu&t=&z=15&ie=UTF8&iwloc=&output=embed",
+      mapUrl: mapUrl,
     },
   ];
 
@@ -49,13 +85,25 @@ const AboutUs = () => {
           <img src="pic2.jpeg" alt="Ahmad Nawaz Profile" />
         </div>
         <div id="other">
-          <a href="https://www.linkedin.com/in/ahmad-nawaz-7985a4363/" target="_blank" rel="noreferrer">
+          <a
+            href="https://www.linkedin.com/in/ahmad-nawaz-7985a4363/"
+            target="_blank"
+            rel="noreferrer"
+          >
             <img src="linkedin.png" alt="LinkedIn Profile" />
           </a>
-          <a href="https://github.com/AhmadNawaz19" target="_blank" rel="noreferrer">
+          <a
+            href="https://github.com/AhmadNawaz19"
+            target="_blank"
+            rel="noreferrer"
+          >
             <img src="github.png" alt="GitHub Profile" />
           </a>
-          <a href="https://www.hackerrank.com/profile/AhmadNawaz" target="_blank" rel="noreferrer">
+          <a
+            href="https://www.hackerrank.com/profile/AhmadNawaz"
+            target="_blank"
+            rel="noreferrer"
+          >
             <img src="hacker.png" alt="HackerRank Profile" />
           </a>
         </div>
@@ -80,26 +128,79 @@ const AboutUs = () => {
                   </p>
                   <p>
                     Website:{" "}
-                    <a href={details.website} target="_blank" rel="noreferrer">
+                    <a
+                      href={details.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {details.website}
                     </a>
                   </p>
                 </>
               )}
 
-              {/* Render Google Map Embed */}
-              {details.mapUrl && (
+              {/* Render Google Map Embed & Admin Edit Form */}
+              {details.id === "location" && (
                 <div className="mapContainer">
-                  <iframe
-                    title="Institute Location"
-                    src={details.mapUrl}
-                    width="100%"
-                    height="250"
-                    style={{ border: 0, borderRadius: "8px", marginTop: "10px" }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
+                  {isAdmin && (
+                    <div style={{ marginBottom: "12px" }}>
+                      {!isEditingMap ? (
+                        <button
+                          onClick={() => setIsEditingMap(true)}
+                          style={{
+                            padding: "6px 12px",
+                            cursor: "pointer",
+                            borderRadius: "4px",
+                          }}
+                        >
+                          Update Map URL
+                        </button>
+                      ) : (
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "8px",
+                            marginTop: "8px",
+                          }}
+                        >
+                          <input
+                            type="text"
+                            value={tempUrl}
+                            onChange={(e) => setTempUrl(e.target.value)}
+                            placeholder="Enter new Map Embed URL..."
+                            style={{
+                              flex: 1,
+                              padding: "6px",
+                              borderRadius: "4px",
+                              border: "1px solid #ccc",
+                            }}
+                          />
+                          <button onClick={handleMapSave}>Save</button>
+                          <button onClick={() => setIsEditingMap(false)}>
+                            Cancel
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Dynamic Map iframe */}
+                  {details.mapUrl && (
+                    <iframe
+                      title="Institute Location"
+                      src={details.mapUrl}
+                      width="100%"
+                      height="250"
+                      style={{
+                        border: 0,
+                        borderRadius: "8px",
+                        marginTop: "10px",
+                      }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                    ></iframe>
+                  )}
                 </div>
               )}
             </div>
