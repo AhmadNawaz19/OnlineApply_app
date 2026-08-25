@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, onValue, set } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+import { ref, onValue, set } from "firebase/database";
+import { auth, database } from "../../Firebase/Firebase"; // CHANGE PATH IF NEEDED
 import "./style.css";
 
 const DEFAULT_MAP_URL =
@@ -8,101 +9,132 @@ const DEFAULT_MAP_URL =
 
 const AboutUs = () => {
   const [isAdmin, setIsAdmin] = useState(false);
-
   const [mapUrl, setMapUrl] = useState(DEFAULT_MAP_URL);
-
-  const [isEditingMap, setIsEditingMap] = useState(false);
-
   const [tempUrl, setTempUrl] = useState(DEFAULT_MAP_URL);
+  const [isEditingMap, setIsEditingMap] = useState(false);
+  const [loadingMap, setLoadingMap] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  // ==========================================
-  // CHECK ADMIN + LISTEN TO MAP URL IN REALTIME
-  // ==========================================
+  // ============================
+  // CHECK AUTH + LOAD MAP
+  // ============================
   useEffect(() => {
-    const auth = getAuth();
-    const db = getDatabase();
+    const mapRef = ref(database, "settings/mapConfig");
 
-    const mapRef = ref(db, "settings/mapConfig");
-
-    // Check if user is admin
+    // Check current Firebase user
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user && user.email === "nawaztechnical@gmail.com") {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
+
+      const isCurrentUserAdmin =
+        user?.email?.toLowerCase() ===
+        "nawaztechnical@gmail.com";
+
+      setIsAdmin(isCurrentUserAdmin);
     });
 
-    // Listen to Firebase Realtime Database
+    // Listen for map changes in Realtime Database
     const unsubscribeMap = onValue(
       mapRef,
       (snapshot) => {
+
         const data = snapshot.val();
 
-        console.log("Map data from Firebase:", data);
-
-        if (data && data.url) {
+        if (data?.url) {
           setMapUrl(data.url);
           setTempUrl(data.url);
+        } else {
+          setMapUrl(DEFAULT_MAP_URL);
+          setTempUrl(DEFAULT_MAP_URL);
         }
+
+        setLoadingMap(false);
       },
       (error) => {
         console.error(
-          "Error loading map URL from Firebase:",
-          error
+          "Firebase read error:",
+          error.code,
+          error.message
         );
+
+        setLoadingMap(false);
       }
     );
 
-    // Cleanup
     return () => {
       unsubscribeAuth();
       unsubscribeMap();
     };
   }, []);
 
-  // ==========================================
-  // SAVE NEW MAP URL
-  // ==========================================
+  // ============================
+  // SAVE MAP URL
+  // ============================
   const handleMapSave = async () => {
-    try {
-      const db = getDatabase();
-      const mapRef = ref(db, "settings/mapConfig");
+    const newUrl = tempUrl.trim();
 
-      if (!tempUrl.trim()) {
-        alert("Please enter a valid map URL.");
-        return;
-      }
+    if (!newUrl) {
+      alert("Please enter a map URL.");
+      return;
+    }
+
+    const user = auth.currentUser;
+
+    if (!user) {
+      alert("You are not logged in.");
+      return;
+    }
+
+    if (
+      user.email?.toLowerCase() !==
+      "nawaztechnical@gmail.com"
+    ) {
+      alert("You do not have permission to update the map.");
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const mapRef = ref(database, "settings/mapConfig");
 
       await set(mapRef, {
-        url: tempUrl.trim(),
+        url: newUrl,
       });
 
-      setMapUrl(tempUrl.trim());
+
+      // onValue will also update these automatically
+      setMapUrl(newUrl);
+      setTempUrl(newUrl);
       setIsEditingMap(false);
 
       alert("Map URL updated successfully.");
     } catch (error) {
       console.error(
-        "Error saving map URL:",
-        error
+        "Firebase save error:",
+        error.code,
+        error.message
       );
 
-      alert("Failed to save map URL.");
+      alert(
+        `Failed to save map: ${error.code || ""} ${
+          error.message || ""
+        }`
+      );
+    } finally {
+      setSaving(false);
     }
   };
 
-  // ==========================================
-  // CANCEL MAP EDITING
-  // ==========================================
+  // ============================
+  // CANCEL EDITING
+  // ============================
   const handleCancel = () => {
     setTempUrl(mapUrl);
     setIsEditingMap(false);
   };
 
-  // ==========================================
-  // PORTFOLIO DETAILS
-  // ==========================================
+  // ============================
+  // DETAILS
+  // ============================
   const Details = [
     {
       id: "intro",
@@ -141,16 +173,12 @@ REST API, and OAuth 2.0.
     {
       id: "location",
       title: "INSTITUTE LOCATION",
-      mapUrl: mapUrl,
     },
   ];
 
-  // ==========================================
-  // COMPONENT UI
-  // ==========================================
   return (
     <div className="aboutMain">
-      {/* LEFT SIDE */}
+      {/* LEFT SECTION */}
       <div id="leftMain">
         <div className="img">
           <img
@@ -160,7 +188,6 @@ REST API, and OAuth 2.0.
         </div>
 
         <div id="other">
-          {/* LinkedIn */}
           <a
             href="https://www.linkedin.com/in/ahmad-nawaz-7985a4363/"
             target="_blank"
@@ -172,7 +199,6 @@ REST API, and OAuth 2.0.
             />
           </a>
 
-          {/* GitHub */}
           <a
             href="https://github.com/AhmadNawaz19"
             target="_blank"
@@ -184,7 +210,6 @@ REST API, and OAuth 2.0.
             />
           </a>
 
-          {/* HackerRank */}
           <a
             href="https://www.hackerrank.com/profile/AhmadNawaz"
             target="_blank"
@@ -198,7 +223,7 @@ REST API, and OAuth 2.0.
         </div>
       </div>
 
-      {/* RIGHT SIDE */}
+      {/* RIGHT SECTION */}
       <div id="rightMain">
         {Details.map((details) => (
           <React.Fragment key={details.id}>
@@ -207,14 +232,12 @@ REST API, and OAuth 2.0.
             </h2>
 
             <div className="description">
-              {/* Description */}
+              {/* NORMAL DESCRIPTION */}
               {details.description && (
-                <p>
-                  {details.description}
-                </p>
+                <p>{details.description}</p>
               )}
 
-              {/* CONTACT SECTION */}
+              {/* CONTACT */}
               {details.id === "contact" && (
                 <>
                   <p>
@@ -226,9 +249,7 @@ REST API, and OAuth 2.0.
 
                   <p>
                     Email:{" "}
-                    <a
-                      href={`mailto:${details.email}`}
-                    >
+                    <a href={`mailto:${details.email}`}>
                       {details.email}
                     </a>
                   </p>
@@ -246,10 +267,11 @@ REST API, and OAuth 2.0.
                 </>
               )}
 
-              {/* LOCATION SECTION */}
+              {/* MAP SECTION */}
               {details.id === "location" && (
                 <div className="mapContainer">
-                  {/* ADMIN MAP EDIT */}
+
+                  {/* ADMIN CONTROLS */}
                   {isAdmin && (
                     <div
                       style={{
@@ -258,82 +280,79 @@ REST API, and OAuth 2.0.
                     >
                       {!isEditingMap ? (
                         <button
+                          type="button"
                           onClick={() =>
                             setIsEditingMap(true)
                           }
-                          style={{
-                            padding: "8px 12px",
-                            cursor: "pointer",
-                            borderRadius: "4px",
-                          }}
                         >
                           Update Map URL
                         </button>
                       ) : (
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "8px",
-                            marginTop: "8px",
-                            flexWrap: "wrap",
-                          }}
-                        >
+                        <div className="mapEditContainer">
                           <input
-                            type="text"
+                            type="url"
                             value={tempUrl}
                             onChange={(e) =>
                               setTempUrl(e.target.value)
                             }
-                            placeholder="Enter new Map Embed URL..."
+                            placeholder="Paste Google Maps embed URL"
                             style={{
-                              flex: 1,
-                              minWidth: "200px",
-                              padding: "8px",
-                              borderRadius: "4px",
-                              border:
-                                "1px solid #ccc",
+                              width: "100%",
+                              padding: "10px",
+                              marginBottom: "8px",
                             }}
                           />
 
-                          <button
-                            onClick={handleMapSave}
+                          <div
                             style={{
-                              padding: "8px 12px",
-                              cursor: "pointer",
+                              display: "flex",
+                              gap: "8px",
+                              flexWrap: "wrap",
                             }}
                           >
-                            Save
-                          </button>
+                            <button
+                              type="button"
+                              onClick={handleMapSave}
+                              disabled={saving}
+                            >
+                              {saving
+                                ? "Saving..."
+                                : "Save"}
+                            </button>
 
-                          <button
-                            onClick={handleCancel}
-                            style={{
-                              padding: "8px 12px",
-                              cursor: "pointer",
-                            }}
-                          >
-                            Cancel
-                          </button>
+                            <button
+                              type="button"
+                              onClick={handleCancel}
+                              disabled={saving}
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       )}
                     </div>
                   )}
 
+                  {/* MAP LOADING */}
+                  {loadingMap && (
+                    <p>Loading map...</p>
+                  )}
+
                   {/* GOOGLE MAP */}
-                  {details.mapUrl && (
+                  {!loadingMap && mapUrl && (
                     <iframe
-                      key={details.mapUrl}
+                      key={mapUrl}
                       title="Institute Location"
-                      src={details.mapUrl}
+                      src={mapUrl}
                       width="100%"
                       height="250"
                       style={{
-                        border: 0,
+                        border: "0",
                         borderRadius: "8px",
-                        marginTop: "10px",
+                        display: "block",
                       }}
                       allowFullScreen
-                      loading="lazy"
+                      loading="eager"
                       referrerPolicy="no-referrer-when-downgrade"
                     />
                   )}
