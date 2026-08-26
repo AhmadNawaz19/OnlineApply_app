@@ -3,6 +3,7 @@ import "./style.css";
 import { useForm } from "react-hook-form";
 import { database } from "../../Firebase/Firebase";
 import { ref, set, push, get } from "firebase/database";
+import { Helmet } from "react-helmet-async";
 
 const Apply = () => {
   const [success, setSuccess] = useState(false);
@@ -72,6 +73,10 @@ const Apply = () => {
   };
 
   return (
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
     <div className="applyMain">
       {success && (
         <div className="success">
@@ -265,6 +270,7 @@ const Apply = () => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 

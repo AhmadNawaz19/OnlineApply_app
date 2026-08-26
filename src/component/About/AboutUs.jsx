@@ -3,6 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { ref, onValue, set } from "firebase/database";
 import { auth, database } from "../../Firebase/Firebase"; // CHANGE PATH IF NEEDED
 import "./style.css";
+import { Helmet } from "react-helmet-async";  
 
 const DEFAULT_MAP_URL =
   "https://maps.google.com/maps?q=University%20of%20Science%20and%20Technology%20Bannu&t=&z=15&ie=UTF8&iwloc=&output=embed";
@@ -158,6 +159,10 @@ REST API, and OAuth 2.0.
   ];
 
   return (
+    <>
+    <Helmet>
+        <meta name="robots" content="noindex, follow" />
+    </Helmet>
     <div className="aboutMain">
       {/* LEFT SECTION */}
       <div id="leftMain">
@@ -311,6 +316,7 @@ REST API, and OAuth 2.0.
         ))}
       </div>
     </div>
+    </>
   );
 };
 

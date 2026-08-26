@@ -3,6 +3,7 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { ref, onValue } from "firebase/database";
 import { database } from "../../Firebase/Firebase";
+import { Helmet } from "react-helmet-async";
 
 const Course = () => {
   const [courses, setCourses] = useState(() => {
@@ -51,6 +52,10 @@ const Course = () => {
   }
 
   return (
+    <>
+      <Helmet>
+        <meta name="robots" content="noindex, follow" />
+      </Helmet>
     <div id="courses">
       {courses.length > 0 ? (
         <div className="courses-grid">
@@ -153,6 +158,7 @@ const Course = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
