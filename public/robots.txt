@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /applications
+Disallow: /login
+Disallow: /course_manager
+
+Sitemap: https://nawaztechnical.com/sitemap.xml
