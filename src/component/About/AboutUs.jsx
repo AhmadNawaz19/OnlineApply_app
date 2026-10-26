@@ -11,6 +11,7 @@ const DEFAULT_MAP_URL =
 const AboutUs = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [mapUrl, setMapUrl] = useState(DEFAULT_MAP_URL);
+  const [mapVisible, setMapVisible] = useState(true);
   const [tempUrl, setTempUrl] = useState(DEFAULT_MAP_URL);
   const [isEditingMap, setIsEditingMap] = useState(false);
   const [loadingMap, setLoadingMap] = useState(true);
@@ -43,6 +44,7 @@ const AboutUs = () => {
           setMapUrl(DEFAULT_MAP_URL);
           setTempUrl(DEFAULT_MAP_URL);
         }
+        setMapVisible(data?.visible !== false);
 
         setLoadingMap(false);
       },
@@ -89,6 +91,7 @@ const AboutUs = () => {
 
       await set(mapRef, {
         url: newUrl,
+        visible: mapVisible,
       });
 
       // onValue will also update these automatically
@@ -101,6 +104,31 @@ const AboutUs = () => {
       console.error("Firebase save error:", error.code, error.message);
 
       alert(`Failed to save map: ${error.code || ""} ${error.message || ""}`);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleMapVisibilityToggle = async () => {
+    const user = auth.currentUser;
+
+    if (!user || user.email?.toLowerCase() !== "nawaztechnical@gmail.com") {
+      alert("You do not have permission to change map visibility.");
+      return;
+    }
+
+    const nextVisibility = !mapVisible;
+
+    try {
+      setSaving(true);
+      await set(ref(database, "settings/mapConfig"), {
+        url: mapUrl,
+        visible: nextVisibility,
+      });
+      setMapVisible(nextVisibility);
+    } catch (error) {
+      console.error("Firebase visibility save error:", error.code, error.message);
+      alert(`Failed to update map visibility: ${error.code || ""} ${error.message || ""}`);
     } finally {
       setSaving(false);
     }
@@ -238,6 +266,22 @@ REST API, and OAuth 2.0.
                         marginBottom: "12px",
                       }}
                     >
+                      <button
+                        type="button"
+                        onClick={handleMapVisibilityToggle}
+                        disabled={loadingMap || saving}
+                      >
+                        {saving
+                          ? "Saving..."
+                          : mapVisible
+                            ? "Hide Map"
+                            : "Show Map"}
+                      </button>
+
+                      {!mapVisible && (
+                        <p>The map is hidden from visitors.</p>
+                      )}
+
                       {!isEditingMap ? (
                         <button
                           type="button"
@@ -291,7 +335,7 @@ REST API, and OAuth 2.0.
                   {loadingMap && <p>Loading map...</p>}
 
                   {/* GOOGLE MAP */}
-                  {!loadingMap && mapUrl && (
+                  {!loadingMap && mapVisible && mapUrl && (
                     <a
                       href={mapUrl}
                       target="_blank"

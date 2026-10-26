@@ -206,7 +206,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .userMain {
     margin: 0;
     width: 100%;

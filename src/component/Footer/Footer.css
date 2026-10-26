@@ -93,7 +93,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   #footer {
     height: auto;
     width: 100%;

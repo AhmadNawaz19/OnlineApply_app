@@ -54,7 +54,6 @@ const Apply = () => {
         Name: data.fullname,
         FatherName: data.fathername,
         Phone: data.phone,
-        CNIC: data.cnic,
         Address: data.address,
         Grade: data.grade,
         Course: data.course,
@@ -152,7 +151,7 @@ const Apply = () => {
             <input
               id="phone"
               type="text"
-              placeholder="03001234567"
+              placeholder="e.g. 03XXXXXXXXX"
               className={errors.phone ? "is-invalid" : ""}
               {...register("phone", {
                 required: "Phone number is required",
@@ -178,32 +177,6 @@ const Apply = () => {
             {errors.phone && <p className="error-msg">{errors.phone.message}</p>}
           </div>
 
-          {/* CNIC */}
-          <div className="form-group">
-            <label htmlFor="cnic">CNIC / B-Form *</label>
-            <input
-              id="cnic"
-              type="text"
-              placeholder="1111111111111"
-              className={errors.cnic ? "is-invalid" : ""}
-              {...register("cnic", {
-                required: "CNIC is required",
-                pattern: {
-                  value: /^[0-9-]+$/,
-                  message: "Only digits and hyphens allowed",
-                },
-                minLength: {
-                  value: 13,
-                  message: "Minimum 13 digits required",
-                },
-                maxLength: {
-                  value: 15,
-                  message: "Maximum 15 digits allowed",
-                },
-              })}
-            />
-            {errors.cnic && <p className="error-msg">{errors.cnic.message}</p>}
-          </div>
 
           {/* Address */}
           <div className="form-group">

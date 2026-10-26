@@ -760,7 +760,7 @@
 
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .HomeMain {
     .welcomMsg {
       height: 100%;

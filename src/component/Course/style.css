@@ -154,7 +154,7 @@
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   #courses {
     max-height: 100vh;
     width: 100%;

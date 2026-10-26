@@ -51,7 +51,7 @@
         
 }
 
-@media (max-width:600px) {
+@media (max-width:768px) {
     .service{
         display: inline-flex;
         height: 8%;
